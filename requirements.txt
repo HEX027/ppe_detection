@@ -1,0 +1,57 @@
+# ============================================================
+# PPE Detection System — requirements.txt
+# Tested on: NVIDIA Jetson Orin Nano, JetPack 5.1.2, Python 3.8
+#
+# INSTALL ORDER (important on Jetson):
+#   1. Install JetPack 5.x (provides CUDA, cuDNN, TensorRT, torch)
+#   2. pip3 install -r requirements.txt
+#
+# Do NOT pip-install torch/torchvision — use JetPack wheels:
+#   https://developer.nvidia.com/embedded/downloads
+# ============================================================
+
+# ── YOLO Framework ────────────────────────────────────────
+ultralytics==8.2.0          # YOLOv8 (training + export)
+
+# ── ONNX Export ───────────────────────────────────────────
+onnx==1.16.0
+onnxruntime-gpu==1.18.0     # GPU-accelerated ONNX inference
+onnxsim==0.4.36             # ONNX graph simplification (pre-TRT step)
+
+# ── Computer Vision ───────────────────────────────────────
+opencv-python-headless==4.9.0.80
+Pillow==10.3.0
+
+# ── Data Augmentation ─────────────────────────────────────
+albumentations==1.4.8       # advanced augmentation pipeline
+
+# ── Dataset Management ────────────────────────────────────
+roboflow==1.1.34            # Roboflow PPE dataset download API
+pycocotools==2.0.8          # COCO metric computation
+
+# ── Numerical / ML Utilities ──────────────────────────────
+numpy==1.24.4
+scipy==1.11.4
+pandas==2.0.3
+scikit-learn==1.3.2
+
+# ── Visualisation / Reporting ────────────────────────────
+matplotlib==3.7.5
+seaborn==0.13.2
+
+# ── Alerts & Notifications ────────────────────────────────
+requests==2.31.0            # HTTP webhook alerts
+playsound==1.3.0            # Audible buzzer via ALSA
+
+# ── Logging & Config ─────────────────────────────────────
+loguru==0.7.2
+tqdm==4.66.4
+pyyaml==6.0.1
+python-dotenv==1.0.1
+
+# ── GStreamer Python (install via apt if this fails) ──────
+PyGObject==3.44.1
+
+# ── Miscellaneous ─────────────────────────────────────────
+psutil==5.9.8               # system resource monitoring
+colorama==0.4.6             # coloured terminal output

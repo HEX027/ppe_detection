@@ -1,0 +1,62 @@
+# ============================================================
+# configs/deploy.yaml
+# Runtime configuration for the PPE inference pipeline
+# ============================================================
+
+# ── Model ─────────────────────────────────────────────────
+model:
+  engine_path: models/tensorrt/ppe_fp16.engine   # TensorRT engine
+  onnx_path:   models/onnx/ppe_model.onnx        # fallback ONNX
+  input_size:  [640, 640]                         # [width, height]
+  conf_thresh: 0.50                               # detection confidence
+  iou_thresh:  0.45                               # NMS IoU threshold
+  class_names: [helmet, vest, gloves]
+
+# ── Camera / Video Source ─────────────────────────────────
+source:
+  # Options: /dev/video0  |  rtsp://...  |  path/to/video.mp4
+  uri: /dev/video0
+  width:  1280
+  height: 720
+  fps:    30
+
+# ── Zones ─────────────────────────────────────────────────
+# Define one or more rectangular monitoring zones (pixel coords).
+# Violations are only logged if the worker centroid falls inside a zone.
+zones:
+  - id: zone_A
+    label: "Assembly Line A"
+    coords: [0, 0, 640, 720]          # [x1, y1, x2, y2]
+  - id: zone_B
+    label: "Assembly Line B"
+    coords: [640, 0, 1280, 720]
+
+# ── Alerts ────────────────────────────────────────────────
+alerts:
+  # On-screen overlay (always enabled)
+  overlay: true
+
+  # Audible buzzer (requires ALSA / speaker)
+  buzzer:
+    enabled: true
+    sound_file: assets/alert.wav
+    cooldown_seconds: 5              # minimum gap between buzzes
+
+  # HTTP webhook (POST JSON payload to an endpoint)
+  webhook:
+    enabled: false
+    url: "http://192.168.1.100:8080/ppe_alert"
+    timeout_seconds: 2
+
+# ── Logging ───────────────────────────────────────────────
+logging:
+  log_dir:      logs/events
+  snapshot_dir: logs/snapshots
+  level: INFO                        # DEBUG | INFO | WARNING | ERROR
+  rotate_mb: 50                      # rotate log file after 50 MB
+  jpeg_quality: 85                   # snapshot JPEG quality (0-100)
+
+# ── Performance ───────────────────────────────────────────
+performance:
+  skip_frames: 0       # process every N+1 frames (0 = every frame)
+  warmup_frames: 10    # discard first N frames for latency measurement

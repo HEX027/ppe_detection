@@ -1,0 +1,27 @@
+# ============================================================
+# configs/ppe_dataset.yaml
+# YOLOv8 dataset configuration for PPE detection
+# ============================================================
+
+# Absolute paths — update to match your deployment directory
+path: /workspace/ppe_detection/data/processed
+
+train: images/train
+val:   images/val
+test:  images/test
+
+# Number of classes
+nc: 3
+
+# Class names — order must match annotation label IDs
+names:
+  0: helmet
+  1: vest
+  2: gloves
+
+# Optional: per-class colour for visualisation (BGR)
+# Used by the inference script for bounding-box drawing
+colors:
+  0: [0, 255, 0]      # helmet  → green
+  1: [0, 165, 255]    # vest    → orange
+  2: [255, 0, 0]      # gloves  → blue
